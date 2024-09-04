@@ -20,6 +20,6 @@ public class Estudante {
     private String nome;
     private String matricula;
 
-    @ManyToMany(mappedBy = "estudante")
+    @ManyToMany(mappedBy = "estudantes")
     private List<Turma> turma;
 }

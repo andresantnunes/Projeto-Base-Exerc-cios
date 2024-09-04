@@ -20,7 +20,7 @@ public class Turma {
     private Long id;
     private String nome;
 
-    @ManyToMany(mappedBy = "turma")
+    @ManyToMany()
     @JoinTable(
             name = "estudante_turma",
             joinColumns = @JoinColumn(name = "turma_id"),
