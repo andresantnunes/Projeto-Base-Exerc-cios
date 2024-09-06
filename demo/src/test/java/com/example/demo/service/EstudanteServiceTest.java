@@ -18,6 +18,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+
+// EX 02
 @ExtendWith(MockitoExtension.class)// adiciona o mockito ao JUnit nessa classe de teste
 class EstudanteServiceTest {
 

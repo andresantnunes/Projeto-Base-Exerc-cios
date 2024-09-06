@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.database.entities.Estudante;
 import com.example.demo.service.EstudanteService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -13,8 +15,11 @@ import java.util.Collections;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
+// EX 05
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -32,7 +37,8 @@ class EstudanteControllerTest {
     @Test
     void listarEstudantes() throws Exception {
 
-        when(estudanteService.listarEstudantes()).thenReturn(Collections.emptyList());
+        when(estudanteService.listarEstudantes())
+                .thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/estudantes"))
                 .andExpect(status().isOk());
@@ -41,10 +47,30 @@ class EstudanteControllerTest {
 
     @Test
     void buscarEstudantePorId() {
+
     }
 
     @Test
-    void cadastrarEstudante() {
+    void cadastrarEstudante() throws Exception {
+
+        Estudante estudante = new Estudante(1L,
+                "Joaquino",
+                "11.22.33",
+                Collections.emptyList());
+
+        when(estudanteService.cadastrarEstudante("Joaquino",
+                "11.22.33"))
+                .thenReturn(estudante);
+
+        mockMvc.perform(
+                post("/estudantes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\n" +
+                                "\t\"nome\":\"Joaquino\",\n" +
+                                "\t\"matricula\": \"11.22.33\"\n" +
+                                "}")
+                )
+                .andExpect(status().isOk());
     }
 
     @Test
