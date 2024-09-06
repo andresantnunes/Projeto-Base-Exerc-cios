@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,7 +39,13 @@ class EstudanteControllerTest {
         when(estudanteService.listarEstudantes())
                 .thenReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/estudantes"))
+        mockMvc.perform(post("/estudantes")
+                        .content("{\n" +
+                                "\t\"nome\":\"nome\",\n" +
+                                "\t\"matricula\":\"1234\"\n" +
+                                "}")
+                        .queryParam("id_turma","1")
+                )
                 .andExpect(status().isOk());
 
     }
@@ -71,6 +76,25 @@ class EstudanteControllerTest {
                                 "}")
                 )
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void cadastrarEstudanteErro400() throws Exception {
+
+        Estudante estudante = new Estudante(1L,
+                "Joaquino",
+                "11.22.33",
+                Collections.emptyList());
+
+        when(estudanteService.cadastrarEstudante("Joaquino",
+                "11.22.33"))
+                .thenReturn(estudante);
+
+        mockMvc.perform(
+                        post("/estudantes")
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isBadRequest());
     }
 
     @Test
