@@ -43,10 +43,6 @@ public class TurmaControllerTest {
 
     }
 
-    @Test
-    public void adicionarEstudanteNaTurmaTest() throws Exception {
-    }
-
 
     @Test
     void listarTurmas()  throws Exception{
@@ -80,15 +76,36 @@ public class TurmaControllerTest {
                 .andExpect(status().isOk());
     }
 
+
+
     @Test
-    void atualizarTurma()  throws Exception{
+    public void removerTurma() throws Exception {
+        mockMvc.perform(delete("/turmas/1"))
+                .andExpect(status().isNoContent());
     }
 
     @Test
-    void removerTurma()  throws Exception{
-    }
+    public void cadastrarEstudanteTurma() throws Exception {
+        mockMvc.perform(post("/turmas")
+                        .content("{\"nome\":\"nome\"}")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andExpect(status().isOk());
 
-    @Test
-    void cadastrarEstudanteTurma()  throws Exception{
+        mockMvc.perform(
+                        post("/estudantes")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\n" +
+                                        "\t\"nome\":\"Joaquino\",\n" +
+                                        "\t\"matricula\": \"11.22.33\"\n" +
+                                        "}")
+                )
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/turmas/estudantes")
+                        .content("{\"idTurma\": 1, \"idEstudante\": 1}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 }
+
